@@ -1,0 +1,64 @@
+<!--
+       AUTHOR: Trevor Woerner
+   START DATE: 04 January 2001 - 12:32:26 AM
+     MODIFIED: 14 February 2001 - 01:21:31 AM
+     FILENAME: news.sgml
+      PURPOSE: xannounce project
+
+   $Revision: 1.3 $
+   Copyright (C) 2001  Trevor Woerner
+
+    Permission is granted to copy, distribute, and/or modify
+    this document under the terms of the GNU Free Documentation
+    Licence, Version 1.1 or any later version published by the
+    Free Software Foundation; with no invariant sections, with
+    no Front-Cover Texts, and with no Back-Cover Texts.
+
+    To receive a copy of the GNU Free Documentation License
+    visit http://www.gnu.org/copyleft/fdl.html or write to
+    the Free Software Foundation, 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
+-->
+
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+    <!ENTITY filename   SYSTEM "file.sgml">
+    <!ENTITY text       "<tag>text</tag>">
+]>
+
+<book>
+    <bookinfo>
+        <title>Project News</title>
+        <date>04 January 2001</date>
+        <author><firstname>Trevor</firstname><surname>Woerner</surname></author>
+        <copyright>
+            <year>2001</year>
+            <holder>Trevor Woerner</holder>
+        </copyright>
+    </bookinfo>
+
+    <article>
+        <title>XANNOUNCE_1_0_1</title>
+        <para>14 February 2001</para>
+        <orderedlist>
+            <listitem><para>
+                Removed the 'copying.sgml' sources and modified the TOC so that it
+                uses the TOCentry to indicate the use of a common copying file.
+            </para></listitem>
+            <listitem><para>
+                Moved to a three-digit version number system.
+            </para></listitem>
+        </orderedlist>
+    </article>
+    
+    <article>
+        <title>release 1.0: XANNOUNCE_1_0</title>
+        <para>30 January 2001</para>
+        <para>
+            First release of this source. This is rather misleading since this project
+            was written a number of years before this date, this is just the date of
+            its release.
+        </para>
+    </article>
+
+</book>

@@ -1,0 +1,74 @@
+<!--
+       AUTHOR: Trevor Woerner
+   START DATE: 03 January 2001 - 08:24:52 PM
+     MODIFIED: 14 February 2001 - 01:28:39 AM
+     FILENAME: download.sgml
+      PURPOSE: download doc for xannounce project
+
+   $Revision: 1.4 $
+   Copyright (C) 2001  Trevor Woerner
+
+    Permission is granted to copy, distribute, and/or modify
+    this document under the terms of the GNU Free Documentation
+    Licence, Version 1.1 or any later version published by the
+    Free Software Foundation; with no invariant sections, with
+    no Front-Cover Texts, and with no Back-Cover Texts.
+
+    To receive a copy of the GNU Free Documentation License
+    visit http://www.gnu.org/copyleft/fdl.html or write to
+    the Free Software Foundation, 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
+-->
+
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!--
+    <!ENTITY filename   SYSTEM "file.sgml">
+    <!ENTITY text       "<tag>text</tag>">
+-->
+]>
+
+<book>
+    <bookinfo>
+        <title>Download</title>
+        <date>03 January 2001</date>
+        <author><firstname>Trevor</firstname><surname>Woerner</surname></author>
+        <copyright>
+            <year>2001</year>
+            <holder>Trevor Woerner</holder>
+        </copyright>
+        <revhistory>
+            <revision>
+                <revnumber>1.0</revnumber>
+                <date>03 January 2001</date>
+                <authorinitials>tlw</authorinitials>
+                <revremark>initial creation of document</revremark>
+            </revision>
+        </revhistory>
+    </bookinfo>
+
+    <article id="sources">
+        <title>Download</title>
+        <variablelist>
+            <title>click on the following to download</title>
+
+            <varlistentry>
+                <term>version 1.0.1</term>
+                <term>63 KB</term>
+                <listitem><para>
+                    <ulink url="xannounce-1.0.1.tar.gz">xannounce-1.0.1.tar.gz</ulink>
+                </para></listitem>
+            </varlistentry>
+
+            <varlistentry>
+                <term>version 1.0</term>
+                <term>68 KB</term>
+                <listitem><para>
+                    xannounce-1.0.tar.gz
+                </para></listitem>
+            </varlistentry>
+
+        </variablelist>
+    </article>
+
+</book>

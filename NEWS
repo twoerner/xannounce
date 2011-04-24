@@ -1,0 +1,38 @@
+Project News
+************
+
+Trevor Woerner
+++++++++++++++
+
+Copyright &copy; 2001 by Trevor Woerner
+
+
+
+Table of Contents
+XANNOUNCE_1_0_1
+release 1.0: XANNOUNCE_1_0
+
+XANNOUNCE_1_0_1
+***************
+
+
+
+14 February 2001
+
+1. Removed the 'copying.sgml' sources and modified the TOC so that it uses
+   the TOCentry to indicate the use of a common copying file. 
+
+2. Moved to a three-digit version number system. 
+
+release 1.0: XANNOUNCE_1_0
+**************************
+
+
+
+30 January 2001
+
+First release of this source. This is rather misleading since this project
+was written a number of years before this date, this is just the date of its
+release. 
+
+

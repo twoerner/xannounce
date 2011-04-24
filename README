@@ -1,52 +1,7 @@
-readme
-******
+README file for xannounce project.
+April 24, 2011
 
-Trevor Woerner
-++++++++++++++
+The string you pass to this application as its only command-line argument
+will be scrolled horizontally in a window.
 
-Copyright &copy; 2001 by Trevor Woerner
-
-
-
-Table of Contents
-Motivation
-What It Does
-In Memorandum
-
-Motivation
-**********
-
-
-
-The motivation for this project was to create my first xlib program! Up to
-this point i had been having trouble getting any of my code or any of the
-example code i came across to work. I had worked as hard as i could by
-myself, then i asked everyone i knew who might know something about xlib
-programming but couldn't get any useful help; they all suggested i learn
-Java instead (which at that time was relatively new and all hyped up). 
-
-What It Does
-************
-
-
-
-You invoke this program on the command line. Pass in a string. A window will
-open up and that string will scroll from left to right until the window is
-clicked. Not earth shattering, but i was excited about it. 
-
-In Memorandum
-*************
-
-
-
-I just wanted to note that some of the inspiration for getting this code to
-work came from the passing away of my Aunt Rita Smith. 
-
-I had worked on this code off an on trying to get it to work and i just
-couldn't seem to get it to do what i wanted. At that time i hadn't touched
-the code in a while and was too frustrated with it to even want to try to
-get it to work. I guess when she passed away, it put a different spin on my
-outlook and i resolved to get it working; and so i did. 
-
-exterm!
-
+This was, back in 2001, my first Xlib program.

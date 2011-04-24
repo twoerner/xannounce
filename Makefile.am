@@ -1,5 +1,8 @@
-EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL NEWS README
-SUBDIRS = code doc
+## Copyright (C) 2011  Trevor Woerner
 
-dist-hook:
-	mv $(distdir)/doc/xannounce.p2w $(distdir)/doc/xannounce.p2w.sample
+########################
+## top-level Makefile.am
+########################
+SUBDIRS = @SUBDIRS@
+EXTRA_DIST = README
+DIST_SUBDIRS = cfg @SUBDIRS@

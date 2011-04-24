@@ -1,115 +1,149 @@
 /*
-	AUTHOR:		Trevor Woerner
-	DATE:		05 January 1997
-	FILENAME:	xannounce.c
-	PURPOSE:	scrolls an announcement until clicked
-	MEMORANDUM:
-		This program was written to mark the unfortunate passing away of my Aunt Rita Smith
-		who, at approximately 9:30 this morning, after a long and painful battle with cancer,
-		simply stopped breathing
-*/
+ * Copyright (C) 2011  Trevor Woerner
+ */
 
-#include "xannounce.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
-XEvent			thisEvent;
-Display			*mainDisplay_ptr;
-Window			mainWindow;
-GC				textGC;
-XFontStruct		*textFont_ptr;
-short			textHeight,stringWidth;
-unsigned long	fgPixel,bgPixel;
-char			*displayName_ptr = NULL,
-				*windowNameStr_ptr = "**** Announcing ****",
-				stringMessage[300];
-int				stringLength;
-XTextProperty	textProp;
+//******************************************************//
+// structures
+//******************************************************//
+struct {
+	unsigned width, height;
+} mainWinDims = {
+	350, 50
+};
 
-int main( int argc, char **argv )
+struct {
+	int x, y;
+} textData;
+
+//******************************************************//
+// prototypes
+//******************************************************//
+static void draw_text (void);
+static void sleep_us (unsigned);
+
+//******************************************************//
+// globals
+//******************************************************//
+Display	*dpy_p;
+Window mainWin;
+GC textGC;
+XFontStruct *textFont_p;
+unsigned textHeight;
+char stringMessage[300];
+int stringLength;
+
+//******************************************************//
+// meat and potatoes
+//******************************************************//
+int
+main (int argc, char *argv[])
 {
-	int				getNextEvent=1;
-	unsigned long	mainWindowEventMask;
-	Bool			waitingEvent;
-	int				i,j,scrollDelay=3000;
-	time_t			endTime,startTime;
-	double			deltaTime;
+	int getNextEvent = 1;
+	long mainWindowEventMask;
+	Bool waitingEvent;
+	XEvent thisEvent;
+	short stringWidth;
+	unsigned long fgPixel,bgPixel;
+	char *windowNameStr_p = "**** Announcing ****";
+	XTextProperty textProp;
 
-	if( argc != 2 ) {
-		fprintf( stderr, "usage: %s \"string\"\n", argv[0] );
-		exit( 1 );
+	if (argc != 2) {
+		fprintf (stderr, "usage: %s \"string\"\n", argv[0]);
+		exit (1);
 	}
-	strcpy( stringMessage, argv[1] );
+	strcpy (stringMessage, argv[1]);
 
-	if( (mainDisplay_ptr = XOpenDisplay( displayName_ptr )) == NULL ) {
-		fprintf( stderr, "could not open display\n" );
-		exit( 1 );
+	dpy_p = XOpenDisplay (NULL);
+	if (dpy_p == NULL) {
+		fprintf (stderr, "could not open display\n");
+		exit (1);
 	}
 
-	fgPixel = BlackPixel( mainDisplay_ptr, DefaultScreen( mainDisplay_ptr ));
-	bgPixel = WhitePixel( mainDisplay_ptr, DefaultScreen( mainDisplay_ptr ));
+	fgPixel = BlackPixel (dpy_p, DefaultScreen (dpy_p));
+	bgPixel = WhitePixel (dpy_p, DefaultScreen (dpy_p));
 
-	mainWindow = XCreateSimpleWindow( mainDisplay_ptr, DefaultRootWindow(mainDisplay_ptr), 1, 1,
-					mainWinDims.width, mainWinDims.height, 1, fgPixel, bgPixel );
-	textGC = XCreateGC( mainDisplay_ptr, mainWindow, 0, NULL );
-	if( (textFont_ptr = XLoadQueryFont( mainDisplay_ptr, "12x24" )) == NULL ) {
-		fprintf( stderr, "can't load font\n" );
-		exit( 1 );
+	mainWin = XCreateSimpleWindow (dpy_p, DefaultRootWindow (dpy_p), 1, 1,
+			mainWinDims.width, mainWinDims.height, 1, fgPixel, bgPixel);
+	textGC = XCreateGC (dpy_p, mainWin, 0, NULL);
+	if ((textFont_p = XLoadQueryFont (dpy_p, "12x24")) == NULL) {
+		fprintf (stderr, "can't load font\n");
+		exit (1);
 	}
-	XSetFont( mainDisplay_ptr, textGC, textFont_ptr->fid );
-	textHeight = (short)(textFont_ptr->max_bounds.ascent + textFont_ptr->max_bounds.descent);
-	stringLength = strlen( stringMessage );
-	stringWidth = (short)(textFont_ptr->max_bounds.width * stringLength);
-	textData.y = (mainWinDims.height>>1) + (textHeight>>1);
+	XSetFont (dpy_p, textGC, textFont_p->fid);
+	textHeight = (unsigned)(textFont_p->max_bounds.ascent + textFont_p->max_bounds.descent);
+	stringLength = (int)strlen (stringMessage);
+	stringWidth = (short)(textFont_p->max_bounds.width * stringLength);
+	textData.y = (int)(mainWinDims.height >> 1) + (int)(textHeight >> 1);
 
-	XStringListToTextProperty( &windowNameStr_ptr, 1, &textProp );
-	XSetWMName( mainDisplay_ptr, mainWindow, &textProp );
+	XStringListToTextProperty (&windowNameStr_p, 1, &textProp);
+	XSetWMName (dpy_p, mainWin, &textProp);
 	mainWindowEventMask = ExposureMask | ButtonReleaseMask | ResizeRedirectMask;
-	XSelectInput( mainDisplay_ptr, mainWindow, mainWindowEventMask );
-	XMapWindow( mainDisplay_ptr, mainWindow );
+	XSelectInput (dpy_p, mainWin, mainWindowEventMask);
+	XMapWindow (dpy_p, mainWin);
 
-	while( getNextEvent ) {
-		if( (waitingEvent = XCheckMaskEvent( mainDisplay_ptr, mainWindowEventMask, &thisEvent )) == True ) {
-			if( thisEvent.xany.window == mainWindow ) {
-				switch( thisEvent.type ) {
+	while (getNextEvent) {
+		waitingEvent = XCheckMaskEvent (dpy_p, mainWindowEventMask, &thisEvent);
+		if (waitingEvent == True) {
+			if (thisEvent.xany.window == mainWin) {
+				switch (thisEvent.type) {
 					case Expose:
-						if( thisEvent.xexpose.count == 0 )
-							DrawText();
+						if (thisEvent.xexpose.count == 0)
+							draw_text ();
 						break;
+
 					case ButtonRelease:
 						getNextEvent = 0;
 						break;
+
 					case ResizeRequest:
-						XResizeWindow( mainDisplay_ptr, mainWindow, mainWinDims.width, mainWinDims.height );
+						XResizeWindow (dpy_p, mainWin,
+								mainWinDims.width,
+								mainWinDims.height);
 						break;
 				}
 			}
-		} else {
-			XClearArea( mainDisplay_ptr, mainWindow, textData.x, (int)(textData.y-textFont_ptr->max_bounds.ascent),
-							0, (unsigned int)textHeight, False );
-			if( textData.x > -(stringWidth) )
+		}
+		else {
+			XClearArea (dpy_p, mainWin, textData.x,
+					(int)(textData.y - textFont_p->max_bounds.ascent),
+					0, textHeight, False);
+			if (textData.x > -(stringWidth))
 				--textData.x;
-			if( textData.x == -(stringWidth) )
-				textData.x = mainWinDims.width;
-			DrawText();
-			sleep_us( 250 );
+			if (textData.x == -(stringWidth))
+				textData.x = (int)mainWinDims.width;
+			draw_text ();
+			sleep_us (250);
 		}
 	}
 
-	XFreeGC( mainDisplay_ptr, textGC );
-	XCloseDisplay( mainDisplay_ptr );
+	XFreeGC (dpy_p, textGC);
+	XCloseDisplay (dpy_p);
 	return 0;
 }
 
-void DrawText( void )
+static void
+draw_text (void)
 {
-	XClearArea( mainDisplay_ptr, mainWindow, textData.x, (int)(textData.y-textFont_ptr->max_bounds.ascent), 0, textHeight, False );
-	XDrawString( mainDisplay_ptr, mainWindow, textGC, textData.x, textData.y, stringMessage, stringLength );
+	XClearArea (dpy_p, mainWin, textData.x, (int)(textData.y-textFont_p->max_bounds.ascent),
+			0, textHeight, False);
+	XDrawString (dpy_p, mainWin, textGC, textData.x, textData.y, stringMessage, stringLength);
 }
 
-void sleep_us( unsigned int usecs )
+static void
+sleep_us (unsigned usecs)
 {
 	struct timeval tval;
 
 	tval.tv_sec = usecs / 1000000;
 	tval.tv_usec = usecs % 1000000;
-	select( 0, NULL, NULL, NULL, &tval );
+	select (0, NULL, NULL, NULL, &tval);
 }

@@ -8,4 +8,3 @@ AM_CFLAGS = $(X_CFLAGS) -Wall -Werror -Wextra -Wconversion -Wreturn-type -Wstric
 LDADD = $(X_PRE_LIBS) $(LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
 
 bin_PROGRAMS = xannounce
-xannounce_SOURCES = xannounce.h xannounce.c

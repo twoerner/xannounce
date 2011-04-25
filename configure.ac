@@ -27,7 +27,6 @@ AC_CHECK_PROG(doc_txt,  docbook2txt,  docbook2txt,  [true],)
 dnl **********************************
 dnl checks for libraries
 dnl **********************************
-AC_PATH_XTRA
 AC_CHECK_LIB(X11, XOpenDisplay,,AC_MSG_ERROR([Can not find X11]),)
 
 dnl **********************************

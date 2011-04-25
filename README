@@ -4,4 +4,4 @@ April 24, 2011
 The string you pass to this application as its only command-line argument
 will be scrolled horizontally in a window.
 
-This was, back in 2001, my first Xlib program.
+This was, back in 1997, my first Xlib program.

@@ -19,11 +19,6 @@ AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
-AC_CHECK_PROG(strip, strip, strip, :)
-AC_CHECK_PROG(doc_html, docbook2html, docbook2html, [true],)
-AC_CHECK_PROG(doc_pdf,  docbook2pdf,  docbook2pdf,  [true],)
-AC_CHECK_PROG(doc_txt,  docbook2txt,  docbook2txt,  [true],)
-
 dnl **********************************
 dnl checks for libraries
 dnl **********************************

@@ -30,7 +30,7 @@ static void draw_text (void);
 //******************************************************//
 // globals
 //******************************************************//
-Display	*dpy_p;
+Display *dpy_p;
 Window mainWin;
 GC textGC;
 XFontStruct *textFont_p;
@@ -49,7 +49,7 @@ main (int argc, char *argv[])
 	Bool waitingEvent;
 	XEvent thisEvent;
 	short stringWidth;
-	unsigned long fgPixel,bgPixel;
+	unsigned long fgPixel, bgPixel;
 	char *windowNameStr_p = "**** Announcing ****";
 	XTextProperty textProp;
 

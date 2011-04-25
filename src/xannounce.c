@@ -123,6 +123,8 @@ main (int argc, char *argv[])
 	}
 
 	free (stringMessage_p);
+	XFree (textProp.value);
+	XFreeFont (dpy_p, textFont_p);
 	XFreeGC (dpy_p, textGC);
 	XCloseDisplay (dpy_p);
 	return 0;

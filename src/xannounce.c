@@ -5,9 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <time.h>
+#include <unistd.h>
 #include <sys/types.h>
-#include <sys/time.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
@@ -28,7 +27,6 @@ struct {
 // prototypes
 //******************************************************//
 static void draw_text (void);
-static void sleep_us (unsigned);
 
 //******************************************************//
 // globals
@@ -121,7 +119,7 @@ main (int argc, char *argv[])
 			if (textData.x == -(stringWidth))
 				textData.x = (int)mainWinDims.width;
 			draw_text ();
-			sleep_us (250);
+			usleep (8500);
 		}
 	}
 
@@ -136,14 +134,4 @@ draw_text (void)
 	XClearArea (dpy_p, mainWin, textData.x, (int)(textData.y-textFont_p->max_bounds.ascent),
 			0, textHeight, False);
 	XDrawString (dpy_p, mainWin, textGC, textData.x, textData.y, stringMessage, stringLength);
-}
-
-static void
-sleep_us (unsigned usecs)
-{
-	struct timeval tval;
-
-	tval.tv_sec = usecs / 1000000;
-	tval.tv_usec = usecs % 1000000;
-	select (0, NULL, NULL, NULL, &tval);
 }

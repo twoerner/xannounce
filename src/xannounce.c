@@ -35,7 +35,7 @@ Window mainWin;
 GC textGC;
 XFontStruct *textFont_p;
 unsigned textHeight;
-char stringMessage[300];
+char *stringMessage_p;
 int stringLength;
 
 //******************************************************//
@@ -57,7 +57,7 @@ main (int argc, char *argv[])
 		fprintf (stderr, "usage: %s \"string\"\n", argv[0]);
 		exit (1);
 	}
-	strcpy (stringMessage, argv[1]);
+	stringMessage_p = strdup (argv[1]);
 
 	dpy_p = XOpenDisplay (NULL);
 	if (dpy_p == NULL) {
@@ -77,7 +77,7 @@ main (int argc, char *argv[])
 	}
 	XSetFont (dpy_p, textGC, textFont_p->fid);
 	textHeight = (unsigned)(textFont_p->max_bounds.ascent + textFont_p->max_bounds.descent);
-	stringLength = (int)strlen (stringMessage);
+	stringLength = (int)strlen (stringMessage_p);
 	stringWidth = (short)(textFont_p->max_bounds.width * stringLength);
 	textData.y = (int)(mainWinDims.height >> 1) + (int)(textHeight >> 1);
 
@@ -122,6 +122,7 @@ main (int argc, char *argv[])
 		}
 	}
 
+	free (stringMessage_p);
 	XFreeGC (dpy_p, textGC);
 	XCloseDisplay (dpy_p);
 	return 0;
@@ -132,5 +133,5 @@ draw_text (void)
 {
 	XClearArea (dpy_p, mainWin, textData.x, (int)(textData.y-textFont_p->max_bounds.ascent),
 			0, textHeight, False);
-	XDrawString (dpy_p, mainWin, textGC, textData.x, textData.y, stringMessage, stringLength);
+	XDrawString (dpy_p, mainWin, textGC, textData.x, textData.y, stringMessage_p, stringLength);
 }

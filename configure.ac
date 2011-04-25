@@ -1,6 +1,6 @@
 dnl Copyright (C) 2011  Trevor Woerner
 
-AC_INIT([xannounce], 2.0.0, twoerner@gmail.com, xannounce)
+AC_INIT([xannounce], 2.0.1, twoerner@gmail.com, xannounce)
 AC_CONFIG_SRCDIR(src/xannounce.c)
 AC_CONFIG_AUX_DIR(cfg)
 AM_INIT_AUTOMAKE([foreign no-dist-gzip dist-bzip2 1.9])

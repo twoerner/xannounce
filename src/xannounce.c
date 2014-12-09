@@ -33,10 +33,11 @@ static void draw_text (void);
 Display *dpy_p;
 Window mainWin;
 GC textGC;
-XFontStruct *textFont_p;
+XFontStruct *textFont_p = NULL;
 unsigned textHeight;
 char *stringMessage_p;
 int stringLength;
+static char *fontName_pG = NULL;
 
 //******************************************************//
 // meat and potatoes
@@ -53,9 +54,14 @@ main (int argc, char *argv[])
 	char *windowNameStr_p = "**** Announcing ****";
 	XTextProperty textProp;
 
-	if (argc != 2) {
-		fprintf (stderr, "usage: %s \"string\"\n", argv[0]);
-		exit (1);
+	if (argc == 3) {
+		fontName_pG = argv[2];
+	}
+	else {
+		if (argc != 2) {
+			fprintf (stderr, "usage: %s \"string\"\n", argv[0]);
+			exit (1);
+		}
 	}
 	stringMessage_p = strdup (argv[1]);
 
@@ -71,10 +77,20 @@ main (int argc, char *argv[])
 	mainWin = XCreateSimpleWindow (dpy_p, DefaultRootWindow (dpy_p), 1, 1,
 			mainWinDims.width, mainWinDims.height, 1, fgPixel, bgPixel);
 	textGC = XCreateGC (dpy_p, mainWin, 0, NULL);
-	if ((textFont_p = XLoadQueryFont (dpy_p, "12x24")) == NULL) {
-		fprintf (stderr, "can't load font\n");
-		exit (1);
+	if (fontName_pG != NULL) {
+		textFont_p = XLoadQueryFont (dpy_p, fontName_pG);
+		fprintf (stderr, "%s font: \"%s\"\n", textFont_p == NULL? "can't load" : "using", fontName_pG);
 	}
+	if (textFont_p == NULL) {
+		textFont_p = XLoadQueryFont (dpy_p, "12x24");
+		fprintf (stderr, "%s font: \"12x24\"\n", textFont_p == NULL? "can't load" : "using");
+	}
+	if (textFont_p == NULL) {
+		textFont_p = XLoadQueryFont (dpy_p, "lucidasans-18");
+		fprintf (stderr, "%s font: \"lucindasans-18\"\n", textFont_p == NULL? "can't load" : "using");
+	}
+	if (textFont_p == NULL)
+		exit (1);
 	XSetFont (dpy_p, textGC, textFont_p->fid);
 	textHeight = (unsigned)(textFont_p->max_bounds.ascent + textFont_p->max_bounds.descent);
 	stringLength = (int)strlen (stringMessage_p);

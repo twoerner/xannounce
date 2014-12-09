@@ -83,7 +83,7 @@ main (int argc, char *argv[])
 
 	XStringListToTextProperty (&windowNameStr_p, 1, &textProp);
 	XSetWMName (dpy_p, mainWin, &textProp);
-	mainWindowEventMask = ExposureMask | ButtonReleaseMask | ResizeRedirectMask;
+	mainWindowEventMask = ExposureMask | ButtonReleaseMask | ButtonPressMask | KeyPressMask | ResizeRedirectMask;
 	XSelectInput (dpy_p, mainWin, mainWindowEventMask);
 	XMapWindow (dpy_p, mainWin);
 
@@ -98,6 +98,8 @@ main (int argc, char *argv[])
 						break;
 
 					case ButtonRelease:
+					case ButtonPress:
+					case KeyPress:
 						getNextEvent = 0;
 						break;
 

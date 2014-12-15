@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -25,6 +26,7 @@ struct {
 //******************************************************//
 // prototypes
 //******************************************************//
+static bool find_font (void);
 static void draw_text (void);
 
 //******************************************************//
@@ -77,23 +79,7 @@ main (int argc, char *argv[])
 	mainWin = XCreateSimpleWindow (dpy_p, DefaultRootWindow (dpy_p), 1, 1,
 			mainWinDims.width, mainWinDims.height, 1, fgPixel, bgPixel);
 	textGC = XCreateGC (dpy_p, mainWin, 0, NULL);
-	if (fontName_pG != NULL) {
-		textFont_p = XLoadQueryFont (dpy_p, fontName_pG);
-		fprintf (stderr, "%s font: \"%s\"\n", textFont_p == NULL? "can't load" : "using", fontName_pG);
-	}
-	if (textFont_p == NULL) {
-		textFont_p = XLoadQueryFont (dpy_p, "12x24");
-		fprintf (stderr, "%s font: \"12x24\"\n", textFont_p == NULL? "can't load" : "using");
-	}
-	if (textFont_p == NULL) {
-		textFont_p = XLoadQueryFont (dpy_p, "lucidasans-18");
-		fprintf (stderr, "%s font: \"lucindasans-18\"\n", textFont_p == NULL? "can't load" : "using");
-	}
-	if (textFont_p == NULL) {
-		textFont_p = XLoadQueryFont (dpy_p, "fixed");
-		fprintf (stderr, "%s font: \"fixed\"\n", textFont_p == NULL? "can't load" : "using");
-	}
-	if (textFont_p == NULL)
+	if (find_font () == false)
 		exit (1);
 	XSetFont (dpy_p, textGC, textFont_p->fid);
 	textHeight = (unsigned)(textFont_p->max_bounds.ascent + textFont_p->max_bounds.descent);
@@ -150,6 +136,30 @@ main (int argc, char *argv[])
 	XFreeGC (dpy_p, textGC);
 	XCloseDisplay (dpy_p);
 	return 0;
+}
+
+static bool
+find_font (void)
+{
+	if (fontName_pG != NULL) {
+		textFont_p = XLoadQueryFont (dpy_p, fontName_pG);
+		fprintf (stderr, "%s font: \"%s\"\n", textFont_p == NULL? "can't load" : "using", fontName_pG);
+	}
+	if (textFont_p == NULL) {
+		textFont_p = XLoadQueryFont (dpy_p, "12x24");
+		fprintf (stderr, "%s font: \"12x24\"\n", textFont_p == NULL? "can't load" : "using");
+	}
+	if (textFont_p == NULL) {
+		textFont_p = XLoadQueryFont (dpy_p, "lucidasans-18");
+		fprintf (stderr, "%s font: \"lucindasans-18\"\n", textFont_p == NULL? "can't load" : "using");
+	}
+	if (textFont_p == NULL) {
+		textFont_p = XLoadQueryFont (dpy_p, "fixed");
+		fprintf (stderr, "%s font: \"fixed\"\n", textFont_p == NULL? "can't load" : "using");
+	}
+	if (textFont_p == NULL)
+		return false;
+	return true;
 }
 
 static void

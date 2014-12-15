@@ -89,6 +89,10 @@ main (int argc, char *argv[])
 		textFont_p = XLoadQueryFont (dpy_p, "lucidasans-18");
 		fprintf (stderr, "%s font: \"lucindasans-18\"\n", textFont_p == NULL? "can't load" : "using");
 	}
+	if (textFont_p == NULL) {
+		textFont_p = XLoadQueryFont (dpy_p, "fixed");
+		fprintf (stderr, "%s font: \"fixed\"\n", textFont_p == NULL? "can't load" : "using");
+	}
 	if (textFont_p == NULL)
 		exit (1);
 	XSetFont (dpy_p, textGC, textFont_p->fid);

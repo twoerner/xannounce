@@ -141,22 +141,23 @@ main (int argc, char *argv[])
 static bool
 find_font (void)
 {
-	if (fontName_pG != NULL) {
-		textFont_p = XLoadQueryFont (dpy_p, fontName_pG);
-		fprintf (stderr, "%s font: \"%s\"\n", textFont_p == NULL? "can't load" : "using", fontName_pG);
+	const char *fontNameStrings_p[] = { fontName_pG, "12x24", "lucidasans-18", "fixed" };
+	unsigned fontNameStringsCnt = sizeof (fontNameStrings_p) / sizeof (fontNameStrings_p[0]);
+	unsigned i;
+
+	for (i=0; i<fontNameStringsCnt; ++i) {
+		if (fontNameStrings_p[i] == NULL)
+				continue;
+
+		textFont_p = XLoadQueryFont (dpy_p, fontNameStrings_p[i]);
+		if (textFont_p == NULL)
+			fprintf (stderr, "can't load font: %s\n", fontNameStrings_p[i]);
+		else {
+			printf ("using font: %s\n", fontNameStrings_p[i]);
+			break;
+		}
 	}
-	if (textFont_p == NULL) {
-		textFont_p = XLoadQueryFont (dpy_p, "12x24");
-		fprintf (stderr, "%s font: \"12x24\"\n", textFont_p == NULL? "can't load" : "using");
-	}
-	if (textFont_p == NULL) {
-		textFont_p = XLoadQueryFont (dpy_p, "lucidasans-18");
-		fprintf (stderr, "%s font: \"lucindasans-18\"\n", textFont_p == NULL? "can't load" : "using");
-	}
-	if (textFont_p == NULL) {
-		textFont_p = XLoadQueryFont (dpy_p, "fixed");
-		fprintf (stderr, "%s font: \"fixed\"\n", textFont_p == NULL? "can't load" : "using");
-	}
+
 	if (textFont_p == NULL)
 		return false;
 	return true;
